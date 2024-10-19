@@ -10,7 +10,6 @@ import java.util.Objects;
 @Getter
 @ToString
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "vehicle")

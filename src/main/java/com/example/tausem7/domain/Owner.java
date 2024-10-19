@@ -10,7 +10,6 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "owner")
