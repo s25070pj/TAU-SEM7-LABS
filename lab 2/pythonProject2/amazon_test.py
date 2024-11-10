@@ -48,10 +48,11 @@ def test_amazon(driver):
     footer = driver.find_element(By.ID, "navFooter")
     assert footer.is_displayed(), "Footer is not visible"
 
-for browser in [webdriver.Chrome, webdriver.Firefox, webdriver.Edge]:
+for browser in [webdriver.Chrome, webdriver.Edge, webdriver.Firefox]:
     driver = browser()
     try:
         test_amazon(driver)
-        print(f"Test completed successfully in {driver.name}")
+        print(f"{driver.name} - Test success")
     finally:
         driver.quit()
+
