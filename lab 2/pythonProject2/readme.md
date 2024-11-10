@@ -34,6 +34,8 @@ Wait for search results to load and confirm that results contain the word "lapto
 Click on the first product in the search results to navigate to its details page.
 Verify that the product page contains either "Laptop" in the title or within the page content.
 Confirm that the product image, navigation bar, and footer are visible on the product details page.
+
+
 4. Biedronka Flyer Navigation Test
 This test checks the navigation through the digital flyer on the Biedronka website.
 
