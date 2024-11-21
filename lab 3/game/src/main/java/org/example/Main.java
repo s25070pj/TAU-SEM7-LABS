@@ -4,15 +4,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    static final int GRID_SIZE = 5;
-    static final char EMPTY_CELL = '.';
-    static final char PLAYER_ICON = 'A';
-    static final char GOAL_ICON = 'B';
-    static final char OBSTACLE_ICON = 'X';
+    public static final int GRID_SIZE = 5;
+    public static final char EMPTY_CELL = '.';
+    public static final char PLAYER_ICON = 'A';
+    public static final char GOAL_ICON = 'B';
+    public static final char OBSTACLE_ICON = 'X';
 
-    static char[][] gameGrid = new char[GRID_SIZE][GRID_SIZE];
-    static int playerPosX = 0;
-    static int playerPosY = 0;
+    public static char[][] gameGrid = new char[GRID_SIZE][GRID_SIZE];
+    public static int playerPosX = 0;
+    public static int playerPosY = 0;
 
     public static void main(String[] args) {
         setupGrid();
