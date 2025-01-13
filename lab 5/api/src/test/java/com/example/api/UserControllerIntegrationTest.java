@@ -52,7 +52,7 @@ public class UserControllerIntegrationTest {
                                 }
                         """));
 
-        // 4. When I go to /users/1 I can see the user "John" returned with status 200
+        // 4.1 When I go to /users/1 I can see the user "John" returned with status 200
         mockMvc.perform(get("/users/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -63,6 +63,14 @@ public class UserControllerIntegrationTest {
                                     "email": "john@john.pl"
                                 }
                         """));
+
+        // 4. When I go to /users I can see users array with one record
+        mockMvc.perform(get("/users")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$[0].name").isString());
 
         //5. When I try to create a user with incomplete data, I get a 400 Bad Request
         mockMvc.perform(post("/users")
