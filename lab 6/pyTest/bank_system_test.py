@@ -1,5 +1,6 @@
 import pytest
 import asyncio
+from unittest.mock import patch
 from bank_system import Account, Bank, InsufficientFundsError
 
 
@@ -36,7 +37,6 @@ def test_withdraw_insufficient_funds(account1):
 
 @pytest.mark.asyncio
 async def test_transfer(account1, account2):
-    # Transfer z konta1 na konto2
     await account1.transfer(account2, 300.0)
     assert account1.balance == 700.0
     assert account2.balance == 800.0
@@ -48,7 +48,6 @@ async def test_transfer_insufficient_funds(account1, account2):
         await account1.transfer(account2, 1500.0)
 
 
-# Testy dla klasy Bank
 def test_create_account(bank):
     account = bank.create_account("12345", "Joe Doe", 300.0)
     assert account.account_number == "12345"
@@ -75,22 +74,18 @@ async def test_process_transaction(bank, account1, account2):
     assert account2.balance == 700.0
 
 
-# Testy wyjątków
 def test_insufficient_funds(account1):
     with pytest.raises(InsufficientFundsError):
         account1.withdraw(1500.0)
 
 
 def test_invalid_account_number(bank):
-    # Tworzymy konto
     bank.create_account("12345", "Jan Kowalski", 1000.0)
 
     with pytest.raises(ValueError, match="Account with this id already exists"):
         bank.create_account("12345", "Karol karol", 500.0)
 
 
-from unittest.mock import patch
-
 
 def mock_external_authorization(*args, **kwargs):
     return True
@@ -103,16 +98,24 @@ def mock_external_authorization(*args, **kwargs):
     return True
 
 
-@patch('bank_system.Account.transfer', side_effect=mock_external_authorization)
-def test_transfer_with_mocking(mock_transfer, account1, account2):
-    account1.deposit(1000.0)
-    account2.deposit(500.0)
+@patch("bank_system.Bank.authorize_transaction")
+def test_mocked_transaction(mock_authorize, bank, account_a, account_b):
+    bank.create_account(account_a.account_number, account_a.owner, account_a.balance)
+    bank.create_account(account_b.account_number, account_b.owner, account_b.balance)
 
-    account1.transfer(account2, 300.0)
+    async def transaction():
+        await account_a.transfer(account_b, 20.0)
 
-    assert account1.balance == 700.0
-    assert account2.balance == 800.0
+    if(mock_authorize.return_value):
+        asyncio.run(bank.process_transaction(transaction))
+        assert account_a.balance == 80.0
+        assert account_b.balance == 70.0
+    else:
+        with pytest.raises(ValueError):
+            asyncio.run(bank.process_transaction(transaction))
 
-    mock_transfer.assert_called_once()
+def test_invalid_account_number(bank):
+    with pytest.raises(ValueError):
+        bank.get_account("invalid_account")
 
 
