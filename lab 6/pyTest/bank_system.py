@@ -47,5 +47,8 @@ class Bank:
             raise ValueError("Konto o tym numerze nie istnieje.")
         return self.accounts[account_number]
 
+    async def authorize_transaction(self, transaction):
+        await True
+
     async def process_transaction(self, transaction_func):
         await transaction_func()
